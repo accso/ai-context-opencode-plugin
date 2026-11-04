@@ -1,0 +1,52 @@
+{
+  "name": "ai-context-opencode-plugin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Lightweight OpenCode plugin providing semantic code search (and opt-in, precomputed call/import-graph impact analysis) as native custom tools -- replacing the Docker-based MCP server, LSP bridge, and standalone file watcher in .ai-context/.",
+  "main": "src/index.ts",
+  "scripts": {
+    "test:unit": "AI_CONTEXT_OS_NOTIFICATIONS=0 AI_CONTEXT_INSTALL_SKILLS=0 AI_CONTEXT_PROJECT_FILES=0 AI_CONTEXT_SHARED_WORKER=0 node --import tsx --test test/unit/**/*.test.ts",
+    "test": "npm run test:unit",
+    "typecheck": "tsc --noEmit",
+    "build": "node scripts/build.mjs",
+    "licenses": "node scripts/generate-third-party-licenses.mjs",
+    "licenses:check": "node scripts/generate-third-party-licenses.mjs --check",
+    "dump-ast": "node --import tsx scripts/dump-ast.mts"
+  },
+  "dependencies": {
+    "@huggingface/hub": "^2.17.5",
+    "@opentelemetry/api": "^1.9.1",
+    "@opentelemetry/exporter-metrics-otlp-http": "^0.300.0",
+    "@opentelemetry/resources": "^3.0.0",
+    "@opentelemetry/sdk-metrics": "^3.0.0",
+    "@opentelemetry/semantic-conventions": "^1.43.0",
+    "@tree-sitter-grammars/tree-sitter-kotlin": "^1.1.0",
+    "better-sqlite3": "^13.0.3",
+    "ignore": "^7.0.11",
+    "onnxruntime-node": "^1.30.0",
+    "tokenizers": "^0.23.2",
+    "tree-sitter-c": "^0.24.1",
+    "tree-sitter-c-sharp": "^0.23.5",
+    "tree-sitter-cpp": "^0.23.4",
+    "tree-sitter-go": "^0.25.0",
+    "tree-sitter-java": "^0.23.5",
+    "tree-sitter-javascript": "^0.25.0",
+    "tree-sitter-python": "^0.25.0",
+    "tree-sitter-ruby": "^0.23.1",
+    "tree-sitter-rust": "^0.24.0",
+    "tree-sitter-typescript": "^0.23.2",
+    "web-tree-sitter": "^0.27.0",
+    "yaml": "^2.9.1",
+    "zod": "~4.1.8"
+  },
+  "devDependencies": {
+    "@opencode-ai/plugin": "^1.19.0",
+    "@opencode/plugin": "^2.2.0",
+    "@types/better-sqlite3": "^9.6.0",
+    "@types/node": "^22.20.5",
+    "esbuild": "^0.28.2",
+    "tsx": "^4.23.15",
+    "typescript": "^5.5.0"
+  }
+}

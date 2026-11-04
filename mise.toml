@@ -1,0 +1,49 @@
+## mise config for ai-context-opencode-plugin.
+#
+# Self-contained: this file does NOT depend on (and is not merged with)
+# the root `ai-context` monorepo's own `mise.toml` (Docker-stack infra
+# tasks for Postgres/Qdrant/reranker) -- it only exists for as long as
+# this package still lives inside that monorepo. Once extracted to its
+# own repository this file keeps working unchanged; nothing in it
+# assumes anything about the parent repo's structure.
+#
+# `mise install` in this directory pins the dev toolchain; `mise run
+# <task>` wraps this package's own npm scripts / setup script so a
+# contributor doesn't need to remember npm script names.
+
+[tools]
+# Matches this package's devDependencies (@types/node ^22.0.0) and the
+# esbuild bundle's node18 compatibility target (scripts/build.mjs) --
+# 22 is simply the newest LTS at/after that floor, used for local dev/
+# test/build tooling. Note: the BUNDLED plugin file itself is loaded and
+# executed by OpenCode's own Bun runtime at use-time, not by this Node
+# install -- this only pins the toolchain used to develop/build/test it.
+node = "22"
+
+[tasks.install]
+description = "Install npm dependencies"
+run = "npm install"
+
+[tasks.test]
+description = "Run the unit test suite (node:test via tsx, no build step required)"
+run = "npm run test:unit"
+depends = ["install"]
+
+[tasks.typecheck]
+description = "Type-check with tsc --noEmit (no emitted output)"
+run = "npm run typecheck"
+depends = ["install"]
+
+[tasks.build]
+description = "Bundle src/index.ts -> dist/accso-ai-context.js (scripts/build.mjs)"
+run = "npm run build"
+depends = ["install"]
+
+[tasks.setup]
+description = "Build, then install the bundled plugin file + its native-dependency package.json into OpenCode's global plugin directory (~/.config/opencode/)"
+run = "./scripts/install-plugin.sh"
+depends = ["install", "build"]
+
+[tasks.ci]
+description = "Everything a CI/pre-flight check should run: typecheck + full unit suite"
+depends = ["typecheck", "test"]
